@@ -140,7 +140,8 @@ export class ScreenerAgent {
     this.running = true;
     try {
       const cycleId = `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`;
-      const limit = opts.limit ?? this.config.meteora.fetchLimit ?? DEFAULT_FETCH_LIMIT;
+      const limit =
+        opts.limit ?? this.config.meteora.fetchLimit ?? DEFAULT_FETCH_LIMIT;
       const progress = new ProgressReporter({
         source: "SCREENER",
         cycleId,
@@ -421,7 +422,9 @@ export class ScreenerAgent {
       current: 0,
       total,
     });
-    const sem = new Semaphore(this.config.meteora.enrichConcurrency ?? DEFAULT_ENRICH_OUTER_CONCURRENCY);
+    const sem = new Semaphore(
+      this.config.meteora.enrichConcurrency ?? DEFAULT_ENRICH_OUTER_CONCURRENCY,
+    );
     const tasks = pools.map((pool) =>
       sem.runExclusive(async () => {
         try {
@@ -836,7 +839,9 @@ export class ScreenerAgent {
       total: targets.length,
     });
 
-    const sem = new Semaphore(this.config.meteora.onchainConcurrency ?? DEFAULT_ONCHAIN_CONCURRENCY);
+    const sem = new Semaphore(
+      this.config.meteora.onchainConcurrency ?? DEFAULT_ONCHAIN_CONCURRENCY,
+    );
     let done = 0;
     await Promise.all(
       targets.map((r) =>
@@ -898,7 +903,10 @@ export class ScreenerAgent {
       .map((result, index) => ({
         result,
         index,
-        score: preLlmCandidateScore(result, this.config.entryPolicy.scoringWeights),
+        score: preLlmCandidateScore(
+          result,
+          this.config.entryPolicy.scoringWeights,
+        ),
       }))
       .sort((a, b) => b.score - a.score || a.index - b.index)
       .map((item) => item.result);
@@ -927,7 +935,9 @@ export class ScreenerAgent {
       total,
     });
 
-    const sem = new Semaphore(this.config.llm.concurrency ?? DEFAULT_LLM_CONCURRENCY);
+    const sem = new Semaphore(
+      this.config.llm.concurrency ?? DEFAULT_LLM_CONCURRENCY,
+    );
     await Promise.all(
       targets.map((r) =>
         sem.runExclusive(async () => {
@@ -1449,7 +1459,7 @@ export class ScreenerAgent {
         ? sizeOverride
         : decision.suggestedSizeUsd && decision.suggestedSizeUsd > 0
           ? decision.suggestedSizeUsd
-          : this.config.manager.fallbackSizeUsd ?? DEFAULT_FALLBACK_SIZE_USD;
+          : (this.config.manager.fallbackSizeUsd ?? DEFAULT_FALLBACK_SIZE_USD);
 
     const rangeCap = this.config.manager.defaultRangeBps;
     const llmRange =
@@ -1626,7 +1636,10 @@ export class ScreenerAgent {
       metrics: {
         ...screeningMetrics(result),
         llmConfidence: decision?.confidence ?? null,
-        entryScore: scoreEnterCandidate(result, this.config.entryPolicy.scoringWeights),
+        entryScore: scoreEnterCandidate(
+          result,
+          this.config.entryPolicy.scoringWeights,
+        ),
         sizeUsd,
         rangeBps,
       },
@@ -1858,8 +1871,24 @@ function minPositive(...values: Array<number | undefined>): number | undefined {
   return positives.length > 0 ? Math.min(...positives) : undefined;
 }
 
-function preLlmCandidateScore(result: ScreeningResult, weights?: { feeRatio?: number; volumeRatio?: number; swaps?: number; liquidityAdds?: number; liquidityRemoves?: number }): number {
-  const w = { feeRatio: 100, volumeRatio: 20, swaps: 5, liquidityAdds: 3, liquidityRemoves: 8, ...weights };
+function preLlmCandidateScore(
+  result: ScreeningResult,
+  weights?: {
+    feeRatio?: number;
+    volumeRatio?: number;
+    swaps?: number;
+    liquidityAdds?: number;
+    liquidityRemoves?: number;
+  },
+): number {
+  const w = {
+    feeRatio: 100,
+    volumeRatio: 20,
+    swaps: 5,
+    liquidityAdds: 3,
+    liquidityRemoves: 8,
+    ...weights,
+  };
   const activeTvl = Math.max(result.pool.activeTvl, 1);
   const tvl = Math.max(result.pool.tvl, 1);
   const feeRatioPct = (result.pool.fees24h / activeTvl) * 100;

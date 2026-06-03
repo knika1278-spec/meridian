@@ -40,20 +40,17 @@ export default function OverviewPage() {
 
   const portfolio = useMemo(() => {
     if (!positions) return null;
-    const openValue = positions.open.reduce(
-      (a, x) => a + (x.sizeUsd ?? 0),
-      0
-    );
+    const openValue = positions.open.reduce((a, x) => a + (x.sizeUsd ?? 0), 0);
     const unrealizedPnl = positions.open.reduce(
       (a, x) => a + (x.pnlUsd ?? 0),
-      0
+      0,
     );
     const realizedPnl = positions.closed.reduce(
       (a, x) => a + (x.pnlUsd ?? 0),
-      0
+      0,
     );
     const closedWithOutcome = positions.closed.filter(
-      (x) => x.pnlUsd !== undefined && x.pnlUsd !== null
+      (x) => x.pnlUsd !== undefined && x.pnlUsd !== null,
     );
     const wins = closedWithOutcome.filter((x) => (x.pnlUsd ?? 0) > 0).length;
     const winRate =
@@ -75,13 +72,12 @@ export default function OverviewPage() {
     if (!data) return null;
     const today = startOfToday();
     const journalToday = o?.recentJournal.filter((j) => j.ts >= today) ?? [];
-    const llmToday =
-      screening?.llmRuns.filter((r) => r.ts >= today) ?? [];
+    const llmToday = screening?.llmRuns.filter((r) => r.ts >= today) ?? [];
     const tradesToday = journalToday.filter(
       (j) =>
         j.action === "ENTER" ||
         j.action === "CLOSE" ||
-        j.action === "REBALANCE"
+        j.action === "REBALANCE",
     ).length;
     return {
       tradesToday,
@@ -142,9 +138,7 @@ export default function OverviewPage() {
               <StatCard
                 label="Win rate"
                 value={
-                  portfolio.winRate !== null
-                    ? fmtPct(portfolio.winRate)
-                    : "—"
+                  portfolio.winRate !== null ? fmtPct(portfolio.winRate) : "—"
                 }
                 accent={
                   portfolio.winRate !== null && portfolio.winRate >= 50
@@ -165,7 +159,7 @@ export default function OverviewPage() {
                     "bg-[var(--panel-2)] border border-[var(--border)] text-[var(--text-secondary)]",
                     "rounded-lg px-3.5 py-[7px] cursor-pointer text-[13px] font-medium",
                     "transition-all duration-150 ease-[var(--ease-out)]",
-                    "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]"
+                    "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
                   )}
                   href="/positions"
                 >
@@ -181,7 +175,7 @@ export default function OverviewPage() {
                       "bg-[var(--panel-2)] border border-[var(--border)] rounded-xl",
                       "p-3.5 px-4",
                       "transition-all duration-250 ease-[var(--ease-out)]",
-                      "hover:border-[var(--border-hover)] hover:shadow-md-dark hover:-translate-y-px"
+                      "hover:border-[var(--border-hover)] hover:shadow-md-dark hover:-translate-y-px",
                     )}
                     key={p.positionPubkey}
                   >
@@ -190,9 +184,7 @@ export default function OverviewPage() {
                         text={p.poolName ?? p.tokens.join("/")}
                         max={20}
                       />
-                      {p.status && (
-                        <Badge text={p.status} tone="#60a5fa" />
-                      )}
+                      {p.status && <Badge text={p.status} tone="#60a5fa" />}
                     </div>
                     <div className="flex gap-3.5">
                       <div className="flex flex-col gap-0.5">
@@ -202,7 +194,9 @@ export default function OverviewPage() {
                         <span
                           className={cn(
                             "text-[13px] font-bold tabular-nums",
-                            (p.pnlUsd ?? 0) >= 0 ? "text-positive" : "text-negative"
+                            (p.pnlUsd ?? 0) >= 0
+                              ? "text-positive"
+                              : "text-negative",
                           )}
                         >
                           {fmtUsd(p.pnlUsd)}
@@ -262,7 +256,7 @@ export default function OverviewPage() {
                     "bg-[var(--panel-2)] border border-[var(--border)] text-[var(--text-secondary)]",
                     "rounded-lg px-3.5 py-[7px] cursor-pointer text-[13px] font-medium",
                     "transition-all duration-150 ease-[var(--ease-out)]",
-                    "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]"
+                    "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
                   )}
                   href="/screening"
                 >
@@ -280,7 +274,7 @@ export default function OverviewPage() {
                         "bg-[var(--panel-2)] border border-[var(--border)] rounded-10",
                         "px-3 py-2 min-w-[68px]",
                         "transition-border-color duration-150 ease-[var(--ease-out)]",
-                        "hover:border-[var(--border-hover)]"
+                        "hover:border-[var(--border-hover)]",
                       )}
                       key={action}
                     >
@@ -314,7 +308,7 @@ export default function OverviewPage() {
                     "bg-[var(--panel-2)] border border-[var(--border)] text-[var(--text-secondary)]",
                     "rounded-lg px-3.5 py-[7px] cursor-pointer text-[13px] font-medium",
                     "transition-all duration-150 ease-[var(--ease-out)]",
-                    "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]"
+                    "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
                   )}
                   href="/management"
                 >
@@ -332,7 +326,7 @@ export default function OverviewPage() {
                         "flex gap-2.5 items-baseline text-[12.5px] py-2",
                         "border-b border-b-[rgba(30,30,46,0.4)]",
                         "last:border-b-0",
-                        "transition-colors duration-150 ease-[var(--ease-out)]"
+                        "transition-colors duration-150 ease-[var(--ease-out)]",
                       )}
                       key={j.id}
                     >
@@ -356,7 +350,7 @@ export default function OverviewPage() {
               className={cn(
                 "mt-4 text-xs text-warning font-medium",
                 "bg-warning-glow border border-[rgba(251,191,36,0.2)]",
-                "rounded-xl px-4 py-3"
+                "rounded-xl px-4 py-3",
               )}
             >
               {data.warnings.map((w, i) => (

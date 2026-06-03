@@ -143,7 +143,12 @@ export default function PositionsPage() {
                           <td className="px-2.5 py-2.5 border-b border-[rgba(30,30,46,0.5)] align-top text-right tabular-nums">
                             {fmtUsd(x.sizeUsd)}
                           </td>
-                          <td className={cn("px-2.5 py-2.5 border-b border-[rgba(30,30,46,0.5)] align-top", pnlClass(x.pnlUsd))}>
+                          <td
+                            className={cn(
+                              "px-2.5 py-2.5 border-b border-[rgba(30,30,46,0.5)] align-top",
+                              pnlClass(x.pnlUsd),
+                            )}
+                          >
                             <span>{fmtUsd(x.pnlUsd)}</span>
                             {x.pnlPct != null && (
                               <span className="text-[11px] ml-1 opacity-70">
@@ -187,7 +192,7 @@ export default function PositionsPage() {
                                 "bg-[var(--panel-2)] border border-[var(--border)] text-[var(--text-secondary)]",
                                 "rounded-lg px-2 py-[3px] cursor-pointer text-[11px] font-medium",
                                 "transition-all duration-150 ease-[var(--ease-out)]",
-                                "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]"
+                                "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
                               )}
                               href={`/positions/${x.positionPubkey}`}
                             >
@@ -243,13 +248,14 @@ export default function PositionsPage() {
                           {fmtRel(x.closedAt)}
                         </td>
                         <td className="px-2.5 py-2.5 border-b border-[rgba(30,30,46,0.5)] align-top">
-                          {x.exitReason ? (
-                            <Badge text={x.exitReason} />
-                          ) : (
-                            "—"
-                          )}
+                          {x.exitReason ? <Badge text={x.exitReason} /> : "—"}
                         </td>
-                        <td className={cn("px-2.5 py-2.5 border-b border-[rgba(30,30,46,0.5)] align-top", pnlClass(x.pnlUsd))}>
+                        <td
+                          className={cn(
+                            "px-2.5 py-2.5 border-b border-[rgba(30,30,46,0.5)] align-top",
+                            pnlClass(x.pnlUsd),
+                          )}
+                        >
                           {fmtUsd(x.pnlUsd)}
                         </td>
                       </tr>

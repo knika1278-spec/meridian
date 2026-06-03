@@ -298,7 +298,10 @@ async function buildManagerDeps(
       circuitBreaker.recordTrade(entry.realizedPnlUsd);
     },
   });
-  const lessonStore = new LessonStore({ filePath: config.manager.lessonsFile, lessonRecencyDays: config.learning.lessonRecencyDays });
+  const lessonStore = new LessonStore({
+    filePath: config.manager.lessonsFile,
+    lessonRecencyDays: config.learning.lessonRecencyDays,
+  });
   const evaluator = new PositionEvaluator({
     actions,
     meteora: base.meteora,

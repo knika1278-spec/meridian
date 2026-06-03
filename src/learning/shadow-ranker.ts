@@ -66,7 +66,10 @@ export class ShadowRanker {
         shadowRecommendation: "avoid",
         magnitude: Math.abs(expectedScore),
       };
-    } else if (decision.action === "SKIP" && expectedScore > this.skipThreshold) {
+    } else if (
+      decision.action === "SKIP" &&
+      expectedScore > this.skipThreshold
+    ) {
       disagreement = {
         llmAction: "SKIP",
         shadowRecommendation: "favor",

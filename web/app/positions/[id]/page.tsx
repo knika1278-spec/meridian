@@ -49,10 +49,14 @@ function BinVisualization({
   }
 
   const range = upper - lower;
-  if (range === 0) return <span className="text-[var(--muted)]">Single bin</span>;
+  if (range === 0)
+    return <span className="text-[var(--muted)]">Single bin</span>;
 
   const entryPct = ((entry - lower) / range) * 100;
-  const currentPct = Math.max(0, Math.min(100, ((current - lower) / range) * 100));
+  const currentPct = Math.max(
+    0,
+    Math.min(100, ((current - lower) / range) * 100),
+  );
 
   return (
     <div>
@@ -109,15 +113,26 @@ function RiskBadge({
     );
   }
   const level = inverse
-    ? value > threshold ? "danger" : value > threshold * 0.7 ? "warning" : "safe"
-    : value < threshold ? "danger" : value < threshold * 1.3 ? "warning" : "safe";
+    ? value > threshold
+      ? "danger"
+      : value > threshold * 0.7
+        ? "warning"
+        : "safe"
+    : value < threshold
+      ? "danger"
+      : value < threshold * 1.3
+        ? "warning"
+        : "safe";
   return (
     <span
       className={cn(
         "inline-flex items-center gap-[5px] px-3 py-1 rounded-lg text-xs font-semibold",
-        level === "safe" && "bg-positive-glow text-positive border border-[rgba(52,211,153,0.2)]",
-        level === "warning" && "bg-warning-glow text-warning border border-[rgba(251,191,36,0.2)]",
-        level === "danger" && "bg-negative-glow text-negative border border-[rgba(248,113,113,0.2)]"
+        level === "safe" &&
+          "bg-positive-glow text-positive border border-[rgba(52,211,153,0.2)]",
+        level === "warning" &&
+          "bg-warning-glow text-warning border border-[rgba(251,191,36,0.2)]",
+        level === "danger" &&
+          "bg-negative-glow text-negative border border-[rgba(248,113,113,0.2)]",
       )}
     >
       {label}: {typeof value === "number" ? value.toFixed(1) : value}
@@ -192,7 +207,7 @@ export default function PositionDetailPage({
             "bg-[var(--panel-2)] border border-[var(--border)] text-[var(--text-secondary)]",
             "rounded-lg px-3.5 py-[7px] cursor-pointer text-xs font-medium",
             "transition-all duration-150 ease-[var(--ease-out)]",
-            "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]"
+            "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
           )}
         >
           &larr; Positions
@@ -203,8 +218,20 @@ export default function PositionDetailPage({
         <div className="flex-1" />
         {pos && (
           <Badge
-            text={ev?.inRange === false ? "OUT OF RANGE" : ev?.inRange === true ? "IN RANGE" : "UNKNOWN"}
-            tone={ev?.inRange === false ? "#f87171" : ev?.inRange === true ? "#34d399" : "#8b97ad"}
+            text={
+              ev?.inRange === false
+                ? "OUT OF RANGE"
+                : ev?.inRange === true
+                  ? "IN RANGE"
+                  : "UNKNOWN"
+            }
+            tone={
+              ev?.inRange === false
+                ? "#f87171"
+                : ev?.inRange === true
+                  ? "#34d399"
+                  : "#8b97ad"
+            }
           />
         )}
         <button
@@ -213,7 +240,7 @@ export default function PositionDetailPage({
             "rounded-lg px-3.5 py-[7px] cursor-pointer text-[13px] font-medium",
             "transition-all duration-150 ease-[var(--ease-out)]",
             "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
-            loading && "opacity-50 cursor-not-allowed"
+            loading && "opacity-50 cursor-not-allowed",
           )}
           onClick={load}
           disabled={loading}
@@ -235,10 +262,7 @@ export default function PositionDetailPage({
               value={fmtUsd(ev?.currentValueUsd ?? pos.entryValueUsd)}
               accent="#60a5fa"
             />
-            <StatCard
-              label="Entry Value"
-              value={fmtUsd(pos.entryValueUsd)}
-            />
+            <StatCard label="Entry Value" value={fmtUsd(pos.entryValueUsd)} />
             <StatCard
               label="Unrealized PnL"
               value={fmtUsd(unrealizedPnl)}
@@ -275,7 +299,11 @@ export default function PositionDetailPage({
                   <div
                     className={cn(
                       "text-[22px] font-extrabold tabular-nums tracking-tight",
-                      pnlClass(ev?.currentPrice != null && pos.entryPrice != null ? ev.currentPrice - pos.entryPrice : null)
+                      pnlClass(
+                        ev?.currentPrice != null && pos.entryPrice != null
+                          ? ev.currentPrice - pos.entryPrice
+                          : null,
+                      ),
                     )}
                   >
                     {fmtPrice(ev?.currentPrice)}
@@ -284,14 +312,20 @@ export default function PositionDetailPage({
                     Current
                   </div>
                 </div>
-                {ev?.currentPrice != null && pos.entryPrice != null && pos.entryPrice > 0 && (
-                  <div className="ml-2">
-                    <Badge
-                      text={`${(((ev.currentPrice - pos.entryPrice) / pos.entryPrice) * 100).toFixed(2)}%`}
-                      tone={ev.currentPrice >= pos.entryPrice ? "#34d399" : "#f87171"}
-                    />
-                  </div>
-                )}
+                {ev?.currentPrice != null &&
+                  pos.entryPrice != null &&
+                  pos.entryPrice > 0 && (
+                    <div className="ml-2">
+                      <Badge
+                        text={`${(((ev.currentPrice - pos.entryPrice) / pos.entryPrice) * 100).toFixed(2)}%`}
+                        tone={
+                          ev.currentPrice >= pos.entryPrice
+                            ? "#34d399"
+                            : "#f87171"
+                        }
+                      />
+                    </div>
+                  )}
               </div>
             </Card>
 
@@ -304,15 +338,21 @@ export default function PositionDetailPage({
                 current={ev?.currentActiveBinId}
               />
               <div className="grid grid-cols-[140px_1fr] gap-y-[7px] gap-x-3.5 text-[13px] mt-3">
-                <span className="text-[var(--muted)] font-medium">Bin step</span>
+                <span className="text-[var(--muted)] font-medium">
+                  Bin step
+                </span>
                 <span className="tabular-nums">{pos.binStep ?? "—"}</span>
-                <span className="text-[var(--muted)] font-medium">Range width</span>
+                <span className="text-[var(--muted)] font-medium">
+                  Range width
+                </span>
                 <span className="tabular-nums">
                   {pos.lowerBinId != null && pos.upperBinId != null
                     ? `${pos.upperBinId - pos.lowerBinId} bins`
                     : "—"}
                 </span>
-                <span className="text-[var(--muted)] font-medium">Strategy</span>
+                <span className="text-[var(--muted)] font-medium">
+                  Strategy
+                </span>
                 <span>{pos.strategyType ?? "—"}</span>
               </div>
             </Card>
@@ -338,7 +378,9 @@ export default function PositionDetailPage({
                 )}
               </div>
               <div className="grid grid-cols-[140px_1fr] gap-y-[7px] gap-x-3.5 text-[13px]">
-                <span className="text-[var(--muted)] font-medium">Out of range</span>
+                <span className="text-[var(--muted)] font-medium">
+                  Out of range
+                </span>
                 <span className="tabular-nums">
                   {ev?.outOfRangeMinutes != null
                     ? ev.outOfRangeMinutes < 60
@@ -354,11 +396,13 @@ export default function PositionDetailPage({
                       : `${(ev.ageMinutes / 60).toFixed(1)}h`
                     : "—"}
                 </span>
-                <span className="text-[var(--muted)] font-medium">Last evaluated</span>
-                <span>
-                  {ev?.evaluatedAt ? fmtRel(ev.evaluatedAt) : "—"}
+                <span className="text-[var(--muted)] font-medium">
+                  Last evaluated
                 </span>
-                <span className="text-[var(--muted)] font-medium">In-range bar</span>
+                <span>{ev?.evaluatedAt ? fmtRel(ev.evaluatedAt) : "—"}</span>
+                <span className="text-[var(--muted)] font-medium">
+                  In-range bar
+                </span>
                 <span className="min-w-[100px]">
                   <ProgressBar
                     value={(ev?.inRangePct ?? 0) * 100}
@@ -377,7 +421,9 @@ export default function PositionDetailPage({
             {/* Position details */}
             <Card title="Position info">
               <div className="grid grid-cols-[140px_1fr] gap-y-[7px] gap-x-3.5 text-[13px]">
-                <span className="text-[var(--muted)] font-medium">Position ID</span>
+                <span className="text-[var(--muted)] font-medium">
+                  Position ID
+                </span>
                 <span className="font-mono text-[11px]">
                   {pos.positionPubkey}
                 </span>
@@ -389,10 +435,14 @@ export default function PositionDetailPage({
                 </span>
                 <span className="text-[var(--muted)] font-medium">Opened</span>
                 <span>{fmtTime(pos.entryTimestamp)}</span>
-                <span className="text-[var(--muted)] font-medium">Entry value</span>
+                <span className="text-[var(--muted)] font-medium">
+                  Entry value
+                </span>
                 <span>{fmtUsd(pos.entryValueUsd)}</span>
                 <span className="text-[var(--muted)] font-medium">Dry run</span>
-                <span>{pos.dryRun != null ? (pos.dryRun ? "Yes" : "No") : "—"}</span>
+                <span>
+                  {pos.dryRun != null ? (pos.dryRun ? "Yes" : "No") : "—"}
+                </span>
                 {pos.txSignature && (
                   <>
                     <span className="text-[var(--muted)] font-medium">Tx</span>
@@ -410,10 +460,10 @@ export default function PositionDetailPage({
                 )}
                 {pos.notes && (
                   <>
-                    <span className="text-[var(--muted)] font-medium">Notes</span>
-                    <span className="text-xs">
-                      {pos.notes}
+                    <span className="text-[var(--muted)] font-medium">
+                      Notes
                     </span>
+                    <span className="text-xs">{pos.notes}</span>
                   </>
                 )}
               </div>
@@ -425,11 +475,17 @@ export default function PositionDetailPage({
             <div className="mt-4">
               <Card title="Fee breakdown">
                 <div className="grid grid-cols-[140px_1fr] gap-y-[7px] gap-x-3.5 text-[13px]">
-                  <span className="text-[var(--muted)] font-medium">Fee token X</span>
+                  <span className="text-[var(--muted)] font-medium">
+                    Fee token X
+                  </span>
                   <span>{ev.claimableFees.tokenX ?? "0"}</span>
-                  <span className="text-[var(--muted)] font-medium">Fee token Y</span>
+                  <span className="text-[var(--muted)] font-medium">
+                    Fee token Y
+                  </span>
                   <span>{ev.claimableFees.tokenY ?? "0"}</span>
-                  <span className="text-[var(--muted)] font-medium">Fee value (USD)</span>
+                  <span className="text-[var(--muted)] font-medium">
+                    Fee value (USD)
+                  </span>
                   <span className="text-cycle font-semibold">
                     {fmtUsd(ev.claimableFees.usdValue)}
                   </span>

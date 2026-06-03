@@ -102,7 +102,10 @@ const DEFAULT_HORIZON_WEIGHTS: Record<number, number> = {
   360: 1.0,
 };
 
-function horizonWeight(horizonMinutes: number, weights?: Record<number, number>): number {
+function horizonWeight(
+  horizonMinutes: number,
+  weights?: Record<number, number>,
+): number {
   const w = weights ?? DEFAULT_HORIZON_WEIGHTS;
   return w[horizonMinutes] ?? 0.6;
 }
@@ -153,7 +156,10 @@ export class EvidenceIndex {
       const key = bucketKeyString(bucketKeyFor(decision.features));
 
       for (const outcome of outcomes) {
-        const hWeight = horizonWeight(outcome.horizonMinutes, this.horizonWeights);
+        const hWeight = horizonWeight(
+          outcome.horizonMinutes,
+          this.horizonWeights,
+        );
         const deltaDays = Math.max(0, (now - outcome.evaluatedAt) / 86_400_000);
         const rWeight = Math.exp(-deltaDays / this.halfLifeDays);
         const weight = hWeight * rWeight;

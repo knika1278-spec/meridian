@@ -24,8 +24,10 @@ function GateDot({ status }: { status: "pass" | "block" | "info" }) {
         "w-2 h-2 rounded-full flex-shrink-0 relative",
         "after:content-[''] after:absolute after:-inset-[3px] after:rounded-full",
         status === "pass" && "bg-positive shadow-glow-positive",
-        status === "block" && "bg-negative shadow-glow-negative after:animate-status-pulse",
-        status === "info" && "bg-accent shadow-glow-accent after:animate-status-pulse"
+        status === "block" &&
+          "bg-negative shadow-glow-negative after:animate-status-pulse",
+        status === "info" &&
+          "bg-accent shadow-glow-accent after:animate-status-pulse",
       )}
     />
   );
@@ -42,7 +44,11 @@ export default function MonitorPage() {
 
   const safetyGates = useMemo(() => {
     if (!positions || !data) return [];
-    const gates: { label: string; status: "pass" | "block" | "info"; detail: string }[] = [];
+    const gates: {
+      label: string;
+      status: "pass" | "block" | "info";
+      detail: string;
+    }[] = [];
 
     const openCount = positions.open.length;
     gates.push({
@@ -55,13 +61,12 @@ export default function MonitorPage() {
     todayStart.setHours(0, 0, 0, 0);
     const todayTs = todayStart.getTime();
 
-    const todayEvents =
-      management?.events.filter((e) => e.ts >= todayTs) ?? [];
+    const todayEvents = management?.events.filter((e) => e.ts >= todayTs) ?? [];
     const tradesToday = todayEvents.filter(
       (e) =>
         e.action === "ENTER" ||
         e.action === "CLOSE" ||
-        e.action === "REBALANCE"
+        e.action === "REBALANCE",
     ).length;
     gates.push({
       label: "Trades today",
@@ -71,7 +76,7 @@ export default function MonitorPage() {
 
     const unrealizedPnl = positions.open.reduce(
       (a, x) => a + (x.pnlUsd ?? 0),
-      0
+      0,
     );
     gates.push({
       label: "Unrealized PnL",
@@ -80,7 +85,7 @@ export default function MonitorPage() {
     });
 
     const inRangePositions = positions.open.filter(
-      (p) => (p.inRangePct ?? 0) >= 80
+      (p) => (p.inRangePct ?? 0) >= 80,
     ).length;
     const inRangePct =
       openCount > 0 ? (inRangePositions / openCount) * 100 : 100;
@@ -131,7 +136,7 @@ export default function MonitorPage() {
           e.summary?.toLowerCase().includes("gate") ||
           e.summary?.toLowerCase().includes("deploy") ||
           e.summary?.toLowerCase().includes("blocked") ||
-          e.summary?.toLowerCase().includes("passed")
+          e.summary?.toLowerCase().includes("passed"),
       )
       .slice(0, 8);
   }, [management]);
@@ -228,7 +233,7 @@ export default function MonitorPage() {
                         "bg-[var(--panel-2)] border border-[var(--border)] rounded-10",
                         "px-3.5 py-3 flex items-center gap-2.5 text-[12.5px]",
                         "transition-border-color duration-150 ease-[var(--ease-out)]",
-                        "hover:border-[var(--border-hover)]"
+                        "hover:border-[var(--border-hover)]",
                       )}
                       key={g.label}
                     >
@@ -343,7 +348,7 @@ export default function MonitorPage() {
                       className={cn(
                         "px-3 py-2.5 bg-[var(--panel-2)] border border-[var(--border)] rounded-10 mb-2",
                         "transition-border-color duration-150 ease-[var(--ease-out)]",
-                        "hover:border-[var(--border-hover)]"
+                        "hover:border-[var(--border-hover)]",
                       )}
                       key={`${r.poolName}-${r.ts}-${i}`}
                     >
@@ -358,7 +363,9 @@ export default function MonitorPage() {
                       </div>
                       <div className="flex gap-3.5 text-[11px] text-[var(--muted)] font-medium">
                         <span>{r.model}</span>
-                        <span>{r.promptTokens}+{r.completionTokens} tok</span>
+                        <span>
+                          {r.promptTokens}+{r.completionTokens} tok
+                        </span>
                         <span>{r.latencyMs}ms</span>
                         <span>{fmtUsd(r.costUsd)}</span>
                         <span>{fmtRel(r.ts)}</span>
@@ -399,7 +406,7 @@ export default function MonitorPage() {
               className={cn(
                 "mt-4 text-xs text-warning font-medium",
                 "bg-warning-glow border border-[rgba(251,191,36,0.2)]",
-                "rounded-xl px-4 py-3"
+                "rounded-xl px-4 py-3",
               )}
             >
               {data.warnings.map((w, i) => (

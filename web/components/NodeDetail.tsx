@@ -61,7 +61,7 @@ export default function NodeDetail({ graph, selectedId, onSelect }: Props) {
   return (
     <div
       className={cn(
-        "bg-[var(--panel-2)] border border-[var(--border)] rounded-xl p-3.5"
+        "bg-[var(--panel-2)] border border-[var(--border)] rounded-xl p-3.5",
       )}
     >
       <span
@@ -80,7 +80,9 @@ export default function NodeDetail({ graph, selectedId, onSelect }: Props) {
       <div className="grid grid-cols-[110px_1fr] gap-x-2.5 gap-y-[5px] text-[12.5px]">
         {!node.isHub && (
           <>
-            <span className="text-[var(--muted)] font-medium">Connectivity</span>
+            <span className="text-[var(--muted)] font-medium">
+              Connectivity
+            </span>
             <span style={{ color: connColor }}>
               {CONNECTIVITY_LABEL[node.connectivity]}
             </span>
@@ -105,9 +107,7 @@ export default function NodeDetail({ graph, selectedId, onSelect }: Props) {
         {node.timestamp > 0 && (
           <>
             <span className="text-[var(--muted)] font-medium">Time</span>
-            <span>
-              {new Date(node.timestamp).toLocaleString()}
-            </span>
+            <span>{new Date(node.timestamp).toLocaleString()}</span>
           </>
         )}
         {Object.entries(node.meta)
@@ -136,7 +136,7 @@ export default function NodeDetail({ graph, selectedId, onSelect }: Props) {
             className={cn(
               "flex items-center gap-2 px-2 py-1.5 rounded-lg cursor-pointer text-[12.5px]",
               "transition-colors duration-150 ease-[var(--ease-out)]",
-              "hover:bg-[var(--panel-3)]"
+              "hover:bg-[var(--panel-3)]",
             )}
             onClick={() => onSelect(row.node.id)}
           >

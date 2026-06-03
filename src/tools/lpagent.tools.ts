@@ -223,9 +223,7 @@ function toNum(v: unknown, fallback = 0): number {
   return Number.isFinite(n) ? n : fallback;
 }
 
-function pickTimeframe(
-  obj: Record<string, unknown>,
-): Record<string, number> {
+function pickTimeframe(obj: Record<string, unknown>): Record<string, number> {
   const out: Record<string, number> = {};
   for (const [k, v] of Object.entries(obj)) {
     out[k] = toNum(v);

@@ -415,7 +415,11 @@ function rawFromUsd(usd: number, priceUsd: number, decimals: number): BN {
 async function sendTxs(
   wallet: WalletTools,
   txs: Transaction | Transaction[],
-  opts: { dryRun?: boolean; extraSigners?: Keypair[]; computeUnitPrice?: number },
+  opts: {
+    dryRun?: boolean;
+    extraSigners?: Keypair[];
+    computeUnitPrice?: number;
+  },
 ): Promise<string | undefined> {
   const signatures = await sendTxList(wallet, txs, opts);
   return signatures[signatures.length - 1];
@@ -424,7 +428,11 @@ async function sendTxs(
 async function sendTxList(
   wallet: WalletTools,
   txs: Transaction | Transaction[],
-  opts: { dryRun?: boolean; extraSigners?: Keypair[]; computeUnitPrice?: number },
+  opts: {
+    dryRun?: boolean;
+    extraSigners?: Keypair[];
+    computeUnitPrice?: number;
+  },
 ): Promise<string[]> {
   const list: Transaction[] = Array.isArray(txs) ? txs : [txs];
   const signatures: string[] = [];
@@ -1258,7 +1266,10 @@ export class MeteoraActions {
     }
 
     const poolPk = new PublicKey(state.poolAddress);
-    const { instance: dlmm, mod } = await getDlmmInstance(this.connection, poolPk);
+    const { instance: dlmm, mod } = await getDlmmInstance(
+      this.connection,
+      poolPk,
+    );
 
     this.requireWallet("rebalance", dryRun);
 
@@ -1274,7 +1285,9 @@ export class MeteoraActions {
     );
 
     // ── 1. Fetch on-chain position data ──
-    const positionData = await dlmm.getPosition(new PublicKey(args.positionPubkey));
+    const positionData = await dlmm.getPosition(
+      new PublicKey(args.positionPubkey),
+    );
 
     // SDK's processPosition() returns null when bin arrays are missing on-chain,
     // which makes positionBinData undefined and causes a crash in RebalancePosition.
@@ -1286,7 +1299,10 @@ export class MeteoraActions {
       );
     }
 
-    if (!dlmm.simulateRebalancePositionWithBalancedStrategy || !dlmm.rebalancePosition) {
+    if (
+      !dlmm.simulateRebalancePositionWithBalancedStrategy ||
+      !dlmm.rebalancePosition
+    ) {
       throw new Error(
         "rebalance: SDK does not expose simulateRebalancePositionWithBalancedStrategy/rebalancePosition. Upgrade @meteora-ag/dlmm.",
       );
@@ -1297,15 +1313,16 @@ export class MeteoraActions {
     // SDK types say PositionShape but runtime toRebalancePositionBinData()
     // accesses positionData.positionBinData directly — needs the inner object.
     const strategyType = resolveStrategyType(mod, "Spot");
-    const simulationResult = await dlmm.simulateRebalancePositionWithBalancedStrategy(
-      new PublicKey(args.positionPubkey),
-      innerData as unknown as PositionShape,
-      strategyType as 0 | 1 | 2,
-      new BN(0), // topUpAmountX: no extra deposit
-      new BN(0), // topUpAmountY: no extra deposit
-      new BN(10_000), // xWithdrawBps: withdraw 100% of X
-      new BN(10_000), // yWithdrawBps: withdraw 100% of Y
-    );
+    const simulationResult =
+      await dlmm.simulateRebalancePositionWithBalancedStrategy(
+        new PublicKey(args.positionPubkey),
+        innerData as unknown as PositionShape,
+        strategyType as 0 | 1 | 2,
+        new BN(0), // topUpAmountX: no extra deposit
+        new BN(0), // topUpAmountY: no extra deposit
+        new BN(10_000), // xWithdrawBps: withdraw 100% of X
+        new BN(10_000), // yWithdrawBps: withdraw 100% of Y
+      );
 
     log.info(
       { position: args.positionPubkey },
@@ -1315,10 +1332,36 @@ export class MeteoraActions {
     // ── 3. Pre-create ATAs if missing (SDK CU estimation sim doesn't include preInstructions) ──
     const tokenX = dlmm.tokenX as { publicKey: PublicKey; owner: PublicKey };
     const tokenY = dlmm.tokenY as { publicKey: PublicKey; owner: PublicKey };
-    const tokenProgramX = tokenX.owner?.equals(TOKEN_2022_PROGRAM_ID) ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID;
-    const tokenProgramY = tokenY.owner?.equals(TOKEN_2022_PROGRAM_ID) ? TOKEN_2022_PROGRAM_ID : TOKEN_PROGRAM_ID;
-    const ataIxX = createAssociatedTokenAccountIdempotentInstruction(user, getAssociatedTokenAddressSync(tokenX.publicKey, user, true, tokenProgramX), user, tokenX.publicKey, tokenProgramX);
-    const ataIxY = createAssociatedTokenAccountIdempotentInstruction(user, getAssociatedTokenAddressSync(tokenY.publicKey, user, true, tokenProgramY), user, tokenY.publicKey, tokenProgramY);
+    const tokenProgramX = tokenX.owner?.equals(TOKEN_2022_PROGRAM_ID)
+      ? TOKEN_2022_PROGRAM_ID
+      : TOKEN_PROGRAM_ID;
+    const tokenProgramY = tokenY.owner?.equals(TOKEN_2022_PROGRAM_ID)
+      ? TOKEN_2022_PROGRAM_ID
+      : TOKEN_PROGRAM_ID;
+    const ataIxX = createAssociatedTokenAccountIdempotentInstruction(
+      user,
+      getAssociatedTokenAddressSync(
+        tokenX.publicKey,
+        user,
+        true,
+        tokenProgramX,
+      ),
+      user,
+      tokenX.publicKey,
+      tokenProgramX,
+    );
+    const ataIxY = createAssociatedTokenAccountIdempotentInstruction(
+      user,
+      getAssociatedTokenAddressSync(
+        tokenY.publicKey,
+        user,
+        true,
+        tokenProgramY,
+      ),
+      user,
+      tokenY.publicKey,
+      tokenProgramY,
+    );
     const ataTx = new Transaction().add(ataIxX, ataIxY);
     await sendTxList(this.wallet, ataTx, { dryRun });
 

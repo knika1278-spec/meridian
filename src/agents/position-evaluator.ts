@@ -134,7 +134,8 @@ export class PositionEvaluator {
 
     // 5. Age + PnL + IL.
     const ageMinutes = Math.max(0, (now - position.entryTimestamp) / 60_000);
-    let pnlUsd = currentValueUsd - position.entryValueUsd + claimableFees.usdValue;
+    let pnlUsd =
+      currentValueUsd - position.entryValueUsd + claimableFees.usdValue;
     const entryUiX = rawToUi(position.entryAmountX, position.tokenX.decimals);
     const entryUiY = rawToUi(position.entryAmountY, position.tokenY.decimals);
     const hodlValueUsd = entryUiX * priceX + entryUiY * priceY;

@@ -243,7 +243,7 @@ function SignalTable({
             <td
               className={cn(
                 "px-2.5 py-2.5 border-b border-[rgba(30,30,46,0.5)] align-top text-right tabular-nums",
-                r.lift >= 0 ? "text-positive" : "text-negative"
+                r.lift >= 0 ? "text-positive" : "text-negative",
               )}
             >
               {fmtNum(r.lift, 3)}

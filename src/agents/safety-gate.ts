@@ -68,7 +68,10 @@ export function evaluateSafety(
     };
   }
 
-  if (cfg.maxDailyTrades !== undefined && snapshot.dailyTradeCount >= cfg.maxDailyTrades) {
+  if (
+    cfg.maxDailyTrades !== undefined &&
+    snapshot.dailyTradeCount >= cfg.maxDailyTrades
+  ) {
     return {
       ok: false,
       code: "max_daily_trades",
@@ -76,7 +79,10 @@ export function evaluateSafety(
     };
   }
 
-  if (cfg.maxDailySpendUsd !== undefined && snapshot.dailySpendUsd + snapshot.tradeSizeUsd > cfg.maxDailySpendUsd) {
+  if (
+    cfg.maxDailySpendUsd !== undefined &&
+    snapshot.dailySpendUsd + snapshot.tradeSizeUsd > cfg.maxDailySpendUsd
+  ) {
     return {
       ok: false,
       code: "max_daily_spend",

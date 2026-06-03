@@ -323,15 +323,14 @@ export class RealtimeListener {
   }
 
   private recordEvent(event: RealtimeEvent): void {
-    const globalBufferSize = this.config.websocket.globalBufferSize ?? DEFAULT_GLOBAL_BUFFER_SIZE;
-    const perPoolBufferSize = this.config.websocket.perPoolBufferSize ?? DEFAULT_PER_POOL_BUFFER_SIZE;
+    const globalBufferSize =
+      this.config.websocket.globalBufferSize ?? DEFAULT_GLOBAL_BUFFER_SIZE;
+    const perPoolBufferSize =
+      this.config.websocket.perPoolBufferSize ?? DEFAULT_PER_POOL_BUFFER_SIZE;
 
     this.globalBuffer.push(event);
     if (this.globalBuffer.length > globalBufferSize) {
-      this.globalBuffer.splice(
-        0,
-        this.globalBuffer.length - globalBufferSize,
-      );
+      this.globalBuffer.splice(0, this.globalBuffer.length - globalBufferSize);
     }
 
     if (event.poolAddress) {
@@ -350,7 +349,9 @@ export class RealtimeListener {
   }
 
   private isDuplicateSignature(signature: string | undefined): boolean {
-    const signatureBufferSize = this.config.websocket.signatureBufferSize ?? DEFAULT_SIGNATURE_BUFFER_SIZE;
+    const signatureBufferSize =
+      this.config.websocket.signatureBufferSize ??
+      DEFAULT_SIGNATURE_BUFFER_SIZE;
 
     if (!signature) return false;
     if (this.seenSignatures.has(signature)) return true;
@@ -369,9 +370,12 @@ export class RealtimeListener {
     if (event.kind !== "swap" || !event.poolAddress) return;
     const pool = event.poolAddress;
     const now = event.timestamp;
-    const spikeWindowMs = this.config.websocket.spikeWindowMs ?? DEFAULT_SWAP_SPIKE_WINDOW_MS;
-    const spikeThreshold = this.config.websocket.spikeThreshold ?? DEFAULT_SWAP_SPIKE_THRESHOLD;
-    const spikeThrottleMs = this.config.websocket.spikeThrottleMs ?? DEFAULT_SPIKE_THROTTLE_MS;
+    const spikeWindowMs =
+      this.config.websocket.spikeWindowMs ?? DEFAULT_SWAP_SPIKE_WINDOW_MS;
+    const spikeThreshold =
+      this.config.websocket.spikeThreshold ?? DEFAULT_SWAP_SPIKE_THRESHOLD;
+    const spikeThrottleMs =
+      this.config.websocket.spikeThrottleMs ?? DEFAULT_SPIKE_THROTTLE_MS;
 
     let timestamps = this.swapTimestampsPerPool.get(pool);
     if (!timestamps) {

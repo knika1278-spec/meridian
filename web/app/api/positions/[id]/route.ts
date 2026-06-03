@@ -24,11 +24,17 @@ export async function GET(
   try {
     const { id } = await params;
     const dir = resolveDataDir();
-    const positions = readJsonArray<Record<string, unknown>>(dir, "positions.json");
+    const positions = readJsonArray<Record<string, unknown>>(
+      dir,
+      "positions.json",
+    );
     const position = positions.find((p) => {
       const pk =
-        typeof p.positionPubkey === "string" ? p.positionPubkey :
-        typeof p.publicKey === "string" ? p.publicKey : undefined;
+        typeof p.positionPubkey === "string"
+          ? p.positionPubkey
+          : typeof p.publicKey === "string"
+            ? p.publicKey
+            : undefined;
       return pk === id;
     });
 

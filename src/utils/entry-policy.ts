@@ -753,7 +753,10 @@ const DEFAULT_SCORING_WEIGHTS: Required<ScoringWeights> = {
   riskCount: 2,
 };
 
-export function scoreEnterCandidate(candidate: DeployCandidateLike, weights?: ScoringWeights): number {
+export function scoreEnterCandidate(
+  candidate: DeployCandidateLike,
+  weights?: ScoringWeights,
+): number {
   const w = { ...DEFAULT_SCORING_WEIGHTS, ...weights };
   const activeTvl = Math.max(candidate.pool.activeTvl, 1);
   const tvl = Math.max(candidate.pool.tvl, 1);

@@ -78,7 +78,8 @@ export default function ManagementPage() {
                       </span>
                       <Badge text={`${p.percent}%`} tone="#60a5fa" />
                       <span className="flex-1 min-w-0">
-                        <strong>{p.source}</strong> &middot; {p.phase} — {p.message}
+                        <strong>{p.source}</strong> &middot; {p.phase} —{" "}
+                        {p.message}
                       </span>
                     </div>
                   ))}

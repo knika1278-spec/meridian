@@ -312,7 +312,10 @@ async function buildManagerDeps(
       circuitBreaker.recordTrade(entry.realizedPnlUsd);
     },
   });
-  const lessonStore = new LessonStore({ filePath: config.manager.lessonsFile, lessonRecencyDays: config.learning.lessonRecencyDays });
+  const lessonStore = new LessonStore({
+    filePath: config.manager.lessonsFile,
+    lessonRecencyDays: config.learning.lessonRecencyDays,
+  });
   const evaluator = new PositionEvaluator({
     actions,
     meteora: base.meteora,
@@ -1810,134 +1813,146 @@ program
     "poll continuously every N seconds (0 = one-shot)",
     "0",
   )
-  .action(
-    async (opts: { config?: string; poll?: string }, cmd: Command) => {
-      applyGlobalOptions(cmd.optsWithGlobals<{ verbose?: boolean }>());
-      try {
-        const base = buildDeps(opts.config);
-        if (!base.lpagent) {
-          console.error(
-            chalk.red(
-              "LPAgent not configured. Set LPAGENT_API_KEY in .env and lpagent.enabled=true in config.",
-            ),
-          );
-          process.exit(1);
-        }
-
-        const connection = createConnection(
-          base.config.rpc.url,
-          base.config.rpc.commitment,
+  .action(async (opts: { config?: string; poll?: string }, cmd: Command) => {
+    applyGlobalOptions(cmd.optsWithGlobals<{ verbose?: boolean }>());
+    try {
+      const base = buildDeps(opts.config);
+      if (!base.lpagent) {
+        console.error(
+          chalk.red(
+            "LPAgent not configured. Set LPAGENT_API_KEY in .env and lpagent.enabled=true in config.",
+          ),
         );
-        const wallet = new WalletTools({
-          connection,
-          privateKeyBase58: getWalletPrivateKey(),
-        });
-        if (!wallet.isConfigured()) {
-          console.error(
-            chalk.red("Wallet not configured. Set WALLET_PRIVATE_KEY in .env."),
+        process.exit(1);
+      }
+
+      const connection = createConnection(
+        base.config.rpc.url,
+        base.config.rpc.commitment,
+      );
+      const wallet = new WalletTools({
+        connection,
+        privateKeyBase58: getWalletPrivateKey(),
+      });
+      if (!wallet.isConfigured()) {
+        console.error(
+          chalk.red("Wallet not configured. Set WALLET_PRIVATE_KEY in .env."),
+        );
+        process.exit(1);
+      }
+      const owner = wallet.getPublicKey().toBase58();
+      console.log(chalk.bold(`\nWallet: ${owner}\n`));
+
+      const pollSeconds = Number(opts.poll ?? "0");
+
+      const printPnl = async () => {
+        const [overview, opening] = await Promise.all([
+          base.lpagent!.getOverview(owner),
+          base.lpagent!.getOpening(owner),
+        ]);
+
+        if (!overview) {
+          console.log(
+            chalk.yellow("No LPAgent data available for this wallet."),
           );
-          process.exit(1);
+          return;
         }
-        const owner = wallet.getPublicKey().toBase58();
-        console.log(chalk.bold(`\nWallet: ${owner}\n`));
 
-        const pollSeconds = Number(opts.poll ?? "0");
+        // Overview table
+        const overviewTable = new Table({
+          head: ["Metric", "USD", "SOL"],
+          style: { head: ["cyan"] },
+        });
+        overviewTable.push(
+          [
+            "Total PnL",
+            fmtUsd(overview.totalPnlUsd),
+            overview.totalPnlSol.toFixed(4),
+          ],
+          [
+            "Total Fees",
+            fmtUsd(overview.totalFeeUsd),
+            overview.totalFeeSol.toFixed(4),
+          ],
+          [
+            "Win Rate",
+            fmtPct(overview.winRateUsd),
+            fmtPct(overview.winRateSol),
+          ],
+          ["APR", fmtPct(overview.apr), "—"],
+          ["ROI", fmtPct(overview.roi), "—"],
+          ["Open Positions", overview.openingPositions.toString(), "—"],
+          ["Total Positions", overview.totalPositions.toString(), "—"],
+          ["Win Positions", overview.winPositions.toString(), "—"],
+          ["Avg Age (hrs)", overview.avgAgeHours.toFixed(1), "—"],
+          ["Total Pools", overview.totalPools.toString(), "—"],
+        );
+        console.log(chalk.bold("=== Wallet PnL Overview ==="));
+        console.log(overviewTable.toString());
 
-        const printPnl = async () => {
-          const [overview, opening] = await Promise.all([
-            base.lpagent!.getOverview(owner),
-            base.lpagent!.getOpening(owner),
-          ]);
-
-          if (!overview) {
-            console.log(chalk.yellow("No LPAgent data available for this wallet."));
-            return;
-          }
-
-          // Overview table
-          const overviewTable = new Table({
-            head: ["Metric", "USD", "SOL"],
+        // Open positions table
+        if (opening.length > 0) {
+          const posTable = new Table({
+            head: [
+              "Pool",
+              "In Range",
+              "PnL USD",
+              "PnL SOL",
+              "Fees USD",
+              "Fees SOL",
+              "IL USD",
+              "Age (hrs)",
+              "APR",
+            ],
             style: { head: ["cyan"] },
           });
-          overviewTable.push(
-            ["Total PnL", fmtUsd(overview.totalPnlUsd), overview.totalPnlSol.toFixed(4)],
-            ["Total Fees", fmtUsd(overview.totalFeeUsd), overview.totalFeeSol.toFixed(4)],
-            ["Win Rate", fmtPct(overview.winRateUsd), fmtPct(overview.winRateSol)],
-            ["APR", fmtPct(overview.apr), "—"],
-            ["ROI", fmtPct(overview.roi), "—"],
-            ["Open Positions", overview.openingPositions.toString(), "—"],
-            ["Total Positions", overview.totalPositions.toString(), "—"],
-            ["Win Positions", overview.winPositions.toString(), "—"],
-            ["Avg Age (hrs)", overview.avgAgeHours.toFixed(1), "—"],
-            ["Total Pools", overview.totalPools.toString(), "—"],
-          );
-          console.log(chalk.bold("=== Wallet PnL Overview ==="));
-          console.log(overviewTable.toString());
-
-          // Open positions table
-          if (opening.length > 0) {
-            const posTable = new Table({
-              head: [
-                "Pool",
-                "In Range",
-                "PnL USD",
-                "PnL SOL",
-                "Fees USD",
-                "Fees SOL",
-                "IL USD",
-                "Age (hrs)",
-                "APR",
-              ],
-              style: { head: ["cyan"] },
-            });
-            for (const pos of opening) {
-              posTable.push([
-                pos.poolName || shortAddr(pos.poolAddress),
-                pos.inRange ? chalk.green("✓") : chalk.red("✗"),
-                fmtUsd(pos.pnlUsd),
-                (pos.pnlSol >= 0 ? "+" : "") + pos.pnlSol.toFixed(4),
-                fmtUsd(pos.feeEarnedUsd),
-                pos.feeEarnedSol.toFixed(4),
-                fmtUsd(pos.ilUsd),
-                pos.ageHours.toFixed(1),
-                fmtPct(pos.apr),
-              ]);
-            }
-            console.log(chalk.bold("\n=== Open Positions ==="));
-            console.log(posTable.toString());
-          } else {
-            console.log(chalk.gray("\nNo open positions."));
+          for (const pos of opening) {
+            posTable.push([
+              pos.poolName || shortAddr(pos.poolAddress),
+              pos.inRange ? chalk.green("✓") : chalk.red("✗"),
+              fmtUsd(pos.pnlUsd),
+              (pos.pnlSol >= 0 ? "+" : "") + pos.pnlSol.toFixed(4),
+              fmtUsd(pos.feeEarnedUsd),
+              pos.feeEarnedSol.toFixed(4),
+              fmtUsd(pos.ilUsd),
+              pos.ageHours.toFixed(1),
+              fmtPct(pos.apr),
+            ]);
           }
-
-          console.log(
-            chalk.gray(
-              `\nUpdated: ${new Date().toLocaleTimeString()} | Source: LPAgent API`,
-            ),
-          );
-        };
-
-        if (pollSeconds > 0) {
-          console.log(
-            chalk.gray(`Polling every ${pollSeconds}s. Press Ctrl+C to stop.\n`),
-          );
-          await printPnl();
-          const timer = setInterval(() => void printPnl(), pollSeconds * 1000);
-          process.on("SIGINT", () => {
-            clearInterval(timer);
-            process.exit(0);
-          });
-          process.on("SIGTERM", () => {
-            clearInterval(timer);
-            process.exit(0);
-          });
+          console.log(chalk.bold("\n=== Open Positions ==="));
+          console.log(posTable.toString());
         } else {
-          await printPnl();
+          console.log(chalk.gray("\nNo open positions."));
         }
-      } catch (err) {
-        fatal(err);
+
+        console.log(
+          chalk.gray(
+            `\nUpdated: ${new Date().toLocaleTimeString()} | Source: LPAgent API`,
+          ),
+        );
+      };
+
+      if (pollSeconds > 0) {
+        console.log(
+          chalk.gray(`Polling every ${pollSeconds}s. Press Ctrl+C to stop.\n`),
+        );
+        await printPnl();
+        const timer = setInterval(() => void printPnl(), pollSeconds * 1000);
+        process.on("SIGINT", () => {
+          clearInterval(timer);
+          process.exit(0);
+        });
+        process.on("SIGTERM", () => {
+          clearInterval(timer);
+          process.exit(0);
+        });
+      } else {
+        await printPnl();
       }
-    },
-  );
+    } catch (err) {
+      fatal(err);
+    }
+  });
 
 program
   .command("realtime")

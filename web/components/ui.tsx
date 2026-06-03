@@ -89,7 +89,7 @@ export function Card({
         "rounded-14 p-[18px_20px] min-w-0",
         "transition-all duration-250 ease-[var(--ease-out)]",
         "shadow-sm-dark",
-        "hover:border-[var(--border-hover)] hover:shadow-md-dark"
+        "hover:border-[var(--border-hover)] hover:shadow-md-dark",
       )}
       style={span ? { gridColumn: `span ${span}` } : undefined}
     >
@@ -127,7 +127,7 @@ export function StatCard({
         "p-4 relative overflow-hidden",
         "transition-all duration-250 ease-[var(--ease-out)]",
         "hover:border-[var(--border-hover)] hover:shadow-md-dark hover:-translate-y-px",
-        "group"
+        "group",
       )}
     >
       {/* Top accent line on hover */}
@@ -200,7 +200,7 @@ export function LiveControls({
           "rounded-lg px-3.5 py-[7px] cursor-pointer text-[13px] font-medium",
           "transition-all duration-150 ease-[var(--ease-out)]",
           "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
-          live && "border-accent text-accent bg-accent-glow"
+          live && "border-accent text-accent bg-accent-glow",
         )}
         onClick={() => setLive(!live)}
       >
@@ -211,7 +211,7 @@ export function LiveControls({
           "bg-[var(--panel-2)] border border-[var(--border)] text-[var(--text-secondary)]",
           "rounded-lg px-3.5 py-[7px] cursor-pointer text-[13px] font-medium",
           "transition-all duration-150 ease-[var(--ease-out)]",
-          "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]"
+          "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
         )}
         onClick={reload}
       >
@@ -243,9 +243,7 @@ export function ProgressBar({
     <div className="w-full">
       {(label || sub) && (
         <div className="flex justify-between items-baseline mb-[5px]">
-          {label && (
-            <span className="text-xs font-semibold">{label}</span>
-          )}
+          {label && <span className="text-xs font-semibold">{label}</span>}
           {sub && (
             <span className="text-[11px] text-[var(--muted)] font-medium">
               {sub}
@@ -378,7 +376,7 @@ export function MetricChange({
     <span
       className={cn(
         "inline-flex items-center gap-[3px] text-xs font-semibold",
-        isUp ? "text-positive" : "text-negative"
+        isUp ? "text-positive" : "text-negative",
       )}
     >
       <span className="text-[9px]">{isUp ? "▲" : "▼"}</span>

@@ -29,7 +29,9 @@ export default function MemoryPage() {
     <div className="h-screen grid grid-cols-[1fr_340px] grid-rows-[auto_1fr]">
       {/* Header */}
       <header className="col-span-2 flex items-center gap-3.5 px-[18px] py-3.5 border-b border-[var(--border)]">
-        <h1 className="text-[17px] m-0 font-bold tracking-tight">🧠 Agent Memory Graph</h1>
+        <h1 className="text-[17px] m-0 font-bold tracking-tight">
+          🧠 Agent Memory Graph
+        </h1>
         <div className="flex-1" />
         <input
           className={cn(
@@ -38,7 +40,7 @@ export default function MemoryPage() {
             "transition-all duration-150 ease-[var(--ease-out)]",
             "focus:outline-none focus:border-accent focus:shadow-[0_0_0_3px_var(--accent-glow)]",
             "placeholder:text-[var(--muted)]",
-            "max-w-60 w-full"
+            "max-w-60 w-full",
           )}
           placeholder="search memory / pool / token…"
           value={search}
@@ -80,7 +82,7 @@ export default function MemoryPage() {
                   "bg-[var(--panel-2)] border border-[var(--border)] rounded-10",
                   "px-3 py-2 min-w-[68px]",
                   "transition-border-color duration-150 ease-[var(--ease-out)]",
-                  "hover:border-[var(--border-hover)]"
+                  "hover:border-[var(--border-hover)]",
                 )}
               >
                 <div className="text-lg font-bold leading-[1.1] tracking-tight tabular-nums">
@@ -95,7 +97,7 @@ export default function MemoryPage() {
                   "bg-[var(--panel-2)] border border-[var(--border)] rounded-10",
                   "px-3 py-2 min-w-[68px]",
                   "transition-border-color duration-150 ease-[var(--ease-out)]",
-                  "hover:border-[var(--border-hover)]"
+                  "hover:border-[var(--border-hover)]",
                 )}
               >
                 <div className="text-lg font-bold leading-[1.1] tracking-tight tabular-nums text-linked">
@@ -110,7 +112,7 @@ export default function MemoryPage() {
                   "bg-[var(--panel-2)] border border-[var(--border)] rounded-10",
                   "px-3 py-2 min-w-[68px]",
                   "transition-border-color duration-150 ease-[var(--ease-out)]",
-                  "hover:border-[var(--border-hover)]"
+                  "hover:border-[var(--border-hover)]",
                 )}
               >
                 <div className="text-lg font-bold leading-[1.1] tracking-tight tabular-nums text-cluster">
@@ -125,7 +127,7 @@ export default function MemoryPage() {
                   "bg-[var(--panel-2)] border border-[var(--border)] rounded-10",
                   "px-3 py-2 min-w-[68px]",
                   "transition-border-color duration-150 ease-[var(--ease-out)]",
-                  "hover:border-[var(--border-hover)]"
+                  "hover:border-[var(--border-hover)]",
                 )}
               >
                 <div className="text-lg font-bold leading-[1.1] tracking-tight tabular-nums text-isolated">
@@ -189,7 +191,7 @@ export default function MemoryPage() {
                 className={cn(
                   "mt-4 text-xs text-warning font-medium",
                   "bg-warning-glow border border-[rgba(251,191,36,0.2)]",
-                  "rounded-xl px-4 py-3"
+                  "rounded-xl px-4 py-3",
                 )}
               >
                 {graph.warnings.map((w, i) => (
@@ -204,8 +206,8 @@ export default function MemoryPage() {
             <div className="text-xs text-[var(--muted)] font-medium break-all">
               {graph.dataDir}
               <br />
-              {stats.edges} edges &middot; {stats.strongEdges} direct &middot; {stats.hubs}{" "}
-              hubs
+              {stats.edges} edges &middot; {stats.strongEdges} direct &middot;{" "}
+              {stats.hubs} hubs
             </div>
           </>
         )}
@@ -231,7 +233,7 @@ function FilterRow({
     <div
       className={cn(
         "flex items-center text-xs cursor-pointer select-none font-medium",
-        on ? "text-[var(--muted)]" : "text-[var(--muted)] opacity-40"
+        on ? "text-[var(--muted)]" : "text-[var(--muted)] opacity-40",
       )}
       onClick={onClick}
     >

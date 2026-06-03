@@ -13,7 +13,11 @@ function readConfig(): Record<string, unknown> {
 }
 
 function writeConfig(config: Record<string, unknown>): void {
-  fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2) + "\n", "utf-8");
+  fs.writeFileSync(
+    CONFIG_PATH,
+    JSON.stringify(config, null, 2) + "\n",
+    "utf-8",
+  );
 }
 
 /** GET — return full config. */

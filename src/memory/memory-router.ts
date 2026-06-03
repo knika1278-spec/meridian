@@ -115,7 +115,12 @@ export class MemoryRouter {
     const already = new Set(bundle.lessons.map((item) => item.id));
     const similarItems = existingSimilarLessons
       .filter((lesson) => !already.has(lesson.id))
-      .map((lesson) => lessonToPromptItem(lesson, scoreLesson(lesson, target, this.config.memory.recencyBonusDays)));
+      .map((lesson) =>
+        lessonToPromptItem(
+          lesson,
+          scoreLesson(lesson, target, this.config.memory.recencyBonusDays),
+        ),
+      );
     bundle.lessons = limitItems(
       [...similarItems, ...bundle.lessons],
       this.config.memory.maxPromptItems,
@@ -140,7 +145,14 @@ export class MemoryRouter {
     const recentLimit = Math.max(this.config.memory.recentLimit, maxItems);
     const scored = this.journal
       .readAll()
-      .map((entry) => ({ item: entry, relevance: scoreJournal(entry, target, this.config.memory.recencyBonusDays) }))
+      .map((entry) => ({
+        item: entry,
+        relevance: scoreJournal(
+          entry,
+          target,
+          this.config.memory.recencyBonusDays,
+        ),
+      }))
       .filter((scoredEntry) => scoredEntry.relevance > 0)
       .sort(sortScoredByRelevanceAndTime((entry) => entry.timestamp))
       .slice(0, recentLimit)
@@ -159,7 +171,11 @@ export class MemoryRouter {
     const scored = lessons
       .map((lesson) => ({
         item: lesson,
-        relevance: scoreLesson(lesson, target, this.config.memory.recencyBonusDays),
+        relevance: scoreLesson(
+          lesson,
+          target,
+          this.config.memory.recencyBonusDays,
+        ),
       }))
       .filter((row) => row.relevance > 0)
       .sort(sortScoredByRelevanceAndTime((lesson) => lesson.timestamp))
@@ -185,11 +201,16 @@ export class MemoryRouter {
             // AUDIT FIX [C2-MITIGATED]: only inject non-toxic evidence. Missing
             // score → excluded (fail-safe). See DEFAULT_EVIDENCE_MIN_NORM_SCORE.
             ((lesson.evidence?.avgOutcome ?? -1) + 1) / 2 >
-              (this.config.memory.minEvidenceNormScore ?? DEFAULT_EVIDENCE_MIN_NORM_SCORE),
+              (this.config.memory.minEvidenceNormScore ??
+                DEFAULT_EVIDENCE_MIN_NORM_SCORE),
         )
         .map((lesson) => ({
           item: lesson,
-          relevance: scoreLearningLesson(lesson, target, this.config.memory.recencyBonusDays),
+          relevance: scoreLearningLesson(
+            lesson,
+            target,
+            this.config.memory.recencyBonusDays,
+          ),
         }))
         .filter((row) => row.relevance > 0)
         .sort(sortScoredByRelevanceAndTime((lesson) => lesson.timestamp))
@@ -375,7 +396,11 @@ function scoreJournal(
   return base + eventBonus + recencyBonus(entry.timestamp, recencyBonusDays);
 }
 
-function scoreLesson(lesson: Lesson, target: MemoryTarget, recencyBonusDays?: number): number {
+function scoreLesson(
+  lesson: Lesson,
+  target: MemoryTarget,
+  recencyBonusDays?: number,
+): number {
   let score = 0;
   if (target.poolName && same(lesson.poolName, target.poolName)) score += 6;
   score +=

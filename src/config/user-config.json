@@ -98,9 +98,7 @@
     "tvlMax": 150000,
     "volume24hMin": 500,
     "excludedTokens": [],
-    "includedTokens": [
-      "So11111111111111111111111111111111111111112"
-    ],
+    "includedTokens": ["So11111111111111111111111111111111111111112"],
     "okxRiskScoreMax": 70,
     "minTokenFeesSol": 30,
     "maxBundlersPct": 30,
@@ -178,12 +176,7 @@
   "learning": {
     "enabled": true,
     "mode": "active",
-    "horizonsMinutes": [
-      10,
-      30,
-      120,
-      360
-    ],
+    "horizonsMinutes": [10, 30, 120, 360],
     "minEvidenceForScore": 5,
     "injectIntoManagerPrompt": false,
     "recencyHalfLifeDays": 14,

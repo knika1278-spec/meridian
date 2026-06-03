@@ -444,9 +444,15 @@ export class ManagerAgent {
 
         // Skip if position was recently rebalanced (cooldown)
         const rebalanceAt = this.rebalanceCooldown.get(position.positionPubkey);
-        if (rebalanceAt && Date.now() - rebalanceAt < ManagerAgent.REBALANCE_COOLDOWN_MS) {
+        if (
+          rebalanceAt &&
+          Date.now() - rebalanceAt < ManagerAgent.REBALANCE_COOLDOWN_MS
+        ) {
           this.log.debug(
-            { position: position.positionPubkey, cooldownMs: ManagerAgent.REBALANCE_COOLDOWN_MS },
+            {
+              position: position.positionPubkey,
+              cooldownMs: ManagerAgent.REBALANCE_COOLDOWN_MS,
+            },
             "risk watcher: skipping close — rebalance cooldown active",
           );
           continue;
@@ -556,12 +562,7 @@ export class ManagerAgent {
           reason: `realtime-trigger: ${heuristic.reason}`,
           confidence: 1,
         };
-        this.recordManagerDecision(
-          position,
-          evaluation,
-          action,
-          cycleId,
-        );
+        this.recordManagerDecision(position, evaluation, action, cycleId);
         const exec = await this.execute(position, evaluation, action);
         this.recordManagerActionResult(
           position,
@@ -1820,7 +1821,8 @@ export class ManagerAgent {
     }
     const freshRealtime = this.recentRealtimeForOpen(
       input,
-      this.config.entryPolicy.realtime?.eventLimit ?? DEFAULT_ENTRY_REALTIME_EVENT_LIMIT,
+      this.config.entryPolicy.realtime?.eventLimit ??
+        DEFAULT_ENTRY_REALTIME_EVENT_LIMIT,
     );
     const validation = validateFreshEntry({
       snapshot: input.entrySnapshot,
@@ -2314,7 +2316,9 @@ export class ManagerAgent {
     heuristic: HeuristicDecision,
     llm: ManagerAction,
   ): ManagerAction {
-    const llmConfident = (llm.confidence ?? 0) >= (this.config.manager.thresholds.llmConfidenceThreshold ?? 0.5);
+    const llmConfident =
+      (llm.confidence ?? 0) >=
+      (this.config.manager.thresholds.llmConfidenceThreshold ?? 0.5);
     if (
       heuristic.critical &&
       heuristic.kind === "close" &&
@@ -2612,7 +2616,9 @@ export class ManagerAgent {
             );
             return { success: true };
           }
-          const newRangeBps = action.newRangeBps || (this.config.manager.thresholds.fallbackRebalanceRangeBps ?? 1000);
+          const newRangeBps =
+            action.newRangeBps ||
+            (this.config.manager.thresholds.fallbackRebalanceRangeBps ?? 1000);
           const r = await this.deps.actions.rebalance({
             positionPubkey: position.positionPubkey,
             newRangeBps,

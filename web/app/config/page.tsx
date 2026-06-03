@@ -110,19 +110,20 @@ export default function ConfigPage() {
         <h1 className="text-xl m-0 font-bold tracking-tight">Configuration</h1>
         <div className="flex-1" />
         {saved && (
-          <span className="text-green-400 text-sm">✓ Saved (hot-reload pending)</span>
+          <span className="text-green-400 text-sm">
+            ✓ Saved (hot-reload pending)
+          </span>
         )}
-        {error && (
-          <span className="text-red-400 text-sm">✗ {error}</span>
-        )}
+        {error && <span className="text-red-400 text-sm">✗ {error}</span>}
       </header>
 
       {/* Real-time Rebalance */}
       <Card title="Real-time Rebalance Trigger">
         <div className="flex flex-col gap-4 text-[13px]">
           <p className="text-[var(--muted)] text-[12px]">
-            Immediately rebalance positions when the active bin moves outside range,
-            instead of waiting for the next cron cycle. Uses WebSocket events from Helius.
+            Immediately rebalance positions when the active bin moves outside
+            range, instead of waiting for the next cron cycle. Uses WebSocket
+            events from Helius.
           </p>
 
           {/* Enabled toggle */}

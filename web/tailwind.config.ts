@@ -66,7 +66,17 @@ const config: Config = {
         token: "#f472b6",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica", "Arial", "sans-serif"],
+        sans: [
+          "var(--font-inter)",
+          "ui-sans-serif",
+          "system-ui",
+          "-apple-system",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica",
+          "Arial",
+          "sans-serif",
+        ],
         mono: ["ui-monospace", "SF Mono", "Menlo", "Consolas", "monospace"],
       },
       fontSize: {
@@ -80,7 +90,7 @@ const config: Config = {
         "sm-dark": "0 1px 2px rgba(0, 0, 0, 0.3)",
         "md-dark": "0 4px 12px rgba(0, 0, 0, 0.25)",
         "lg-dark": "0 8px 32px rgba(0, 0, 0, 0.35)",
-        "glow": "0 0 20px rgba(129, 140, 248, 0.08)",
+        glow: "0 0 20px rgba(129, 140, 248, 0.08)",
         "glow-positive": "0 0 8px rgba(52, 211, 153, 0.3)",
         "glow-negative": "0 0 8px rgba(248, 113, 113, 0.3)",
         "glow-warning": "0 0 8px rgba(251, 191, 36, 0.3)",
@@ -102,8 +112,14 @@ const config: Config = {
           "50%": { opacity: "0.3" },
         },
         "pulse-cycle": {
-          "0%, 100%": { opacity: "1", boxShadow: "0 0 8px rgba(52, 211, 153, 0.12)" },
-          "50%": { opacity: "0.5", boxShadow: "0 0 16px rgba(52, 211, 153, 0.12)" },
+          "0%, 100%": {
+            opacity: "1",
+            boxShadow: "0 0 8px rgba(52, 211, 153, 0.12)",
+          },
+          "50%": {
+            opacity: "0.5",
+            boxShadow: "0 0 16px rgba(52, 211, 153, 0.12)",
+          },
         },
         "live-pulse": {
           "0%": { opacity: "0.5", transform: "scale(0.98)" },

@@ -84,7 +84,7 @@ export default function Sidebar() {
           "hidden fixed top-3.5 left-3.5 z-[100]",
           "bg-[var(--panel)] border border-[var(--border)] rounded-10",
           "p-[9px_11px] text-[var(--text)] text-lg cursor-pointer shadow-md-dark",
-          "max-md:flex items-center justify-center"
+          "max-md:flex items-center justify-center",
         )}
         onClick={() => setOpen(!open)}
         aria-label="Toggle sidebar"
@@ -96,7 +96,7 @@ export default function Sidebar() {
       <div
         className={cn(
           "hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[49]",
-          open && "max-md:block"
+          open && "max-md:block",
         )}
         onClick={() => setOpen(false)}
       />
@@ -114,7 +114,7 @@ export default function Sidebar() {
           /* mobile styles */
           "max-md:fixed max-md:top-0 max-md:left-0 max-md:h-screen max-md:z-50",
           "max-md:w-[260px] max-md:transition-transform max-md:duration-300 max-md:ease-[var(--ease-out)]",
-          open ? "max-md:translate-x-0" : "max-md:-translate-x-full"
+          open ? "max-md:translate-x-0" : "max-md:-translate-x-full",
         )}
       >
         {/* Brand */}
@@ -123,7 +123,9 @@ export default function Sidebar() {
             ◎
           </span>
           <div>
-            <div className="font-bold text-[14px] tracking-tight">Meteora DLMM</div>
+            <div className="font-bold text-[14px] tracking-tight">
+              Meteora DLMM
+            </div>
             <div className="text-[11px] text-[var(--muted)] tracking-[0.02em] uppercase font-medium">
               agent dashboard
             </div>
@@ -151,7 +153,7 @@ export default function Sidebar() {
                     "before:content-[''] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2",
                     "before:w-[3px] before:h-5 before:rounded-r-[3px] before:bg-accent",
                     "before:shadow-[0_0_12px_var(--accent-glow)]",
-                  ]
+                  ],
                 )}
                 onClick={() => setOpen(false)}
               >
@@ -162,7 +164,7 @@ export default function Sidebar() {
                     className={cn(
                       "ml-auto bg-accent text-white text-[10px] font-bold",
                       "px-[7px] py-0.5 rounded-full min-w-5 text-center",
-                      "shadow-glow-accent"
+                      "shadow-glow-accent",
                     )}
                   >
                     {positionCount}
@@ -181,7 +183,7 @@ export default function Sidebar() {
               "bg-[var(--panel-2)] border border-[var(--border)] text-[var(--text-secondary)]",
               "rounded-10 px-3 py-[9px] text-[12.5px] font-medium cursor-pointer",
               "transition-all duration-150 ease-[var(--ease-out)]",
-              "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]"
+              "hover:border-[var(--border-hover)] hover:bg-[var(--panel-3)] hover:text-[var(--text)]",
             )}
             onClick={toggleTheme}
             aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
