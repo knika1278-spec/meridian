@@ -1,0 +1,138 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================
+   Theme CSS Variables (used by components that
+   need dynamic runtime values, e.g. inline styles)
+   ============================================ */
+:root {
+  /* Surface palette */
+  --bg: #08080d;
+  --bg-subtle: #0c0c14;
+  --panel: #101018;
+  --panel-2: #16161f;
+  --panel-3: #1c1c28;
+  --border: #1e1e2e;
+  --border-hover: #2a2a40;
+  --border-accent: rgba(99, 102, 241, 0.3);
+
+  /* Text palette */
+  --text: #e8eaf0;
+  --text-secondary: #b0b4c4;
+  --muted: #6b7094;
+
+  /* Semantic colors */
+  --accent: #818cf8;
+  --accent-glow: rgba(129, 140, 248, 0.15);
+  --linked: #34d399;
+  --linked-glow: rgba(52, 211, 153, 0.12);
+  --cluster: #fbbf24;
+  --cluster-glow: rgba(251, 191, 36, 0.12);
+  --isolated: #f87171;
+  --isolated-glow: rgba(248, 113, 113, 0.12);
+  --pool: #60a5fa;
+  --cycle: #a78bfa;
+  --token: #f472b6;
+  --info: #22d3ee;
+  --info-glow: rgba(34, 211, 238, 0.12);
+
+  /* Glass effect */
+  --glass-bg: rgba(16, 16, 24, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.04);
+  --glass-blur: 12px;
+
+  /* Transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 150ms;
+  --duration-normal: 250ms;
+
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  --bg: #f5f6fa;
+  --bg-subtle: #eef0f6;
+  --panel: #ffffff;
+  --panel-2: #f0f1f7;
+  --panel-3: #e8eaf2;
+  --border: #dce0ec;
+  --border-hover: #c8cde0;
+  --border-accent: rgba(99, 102, 241, 0.2);
+  --text: #1a1d2e;
+  --text-secondary: #4a5068;
+  --muted: #8890a8;
+  --accent: #6366f1;
+  --accent-glow: rgba(99, 102, 241, 0.08);
+  --linked: #059669;
+  --linked-glow: rgba(5, 150, 105, 0.08);
+  --cluster: #d97706;
+  --cluster-glow: rgba(217, 119, 6, 0.08);
+  --isolated: #dc2626;
+  --isolated-glow: rgba(220, 38, 38, 0.08);
+  --pool: #2563eb;
+  --cycle: #7c3aed;
+  --token: #db2777;
+  --info: #0891b2;
+  --info-glow: rgba(8, 145, 178, 0.08);
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  color-scheme: light;
+}
+
+/* ============================================
+   Base resets
+   ============================================ */
+html {
+  transition: background var(--duration-normal) var(--ease-out);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.01em;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ============================================
+   Scrollbar
+   ============================================ */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}

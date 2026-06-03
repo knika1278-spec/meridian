@@ -1,0 +1,63 @@
+{
+  "name": "meteora-dlmm-screener-agent",
+  "version": "0.1.0",
+  "description": "Autonomous CLI agent for screening Meteora DLMM pools using Helius WebSocket Enhanced + LLM reasoning.",
+  "type": "module",
+  "bin": {
+    "meteora-screener": "./dist/cli.js"
+  },
+  "scripts": {
+    "dev": "tsx src/cli.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/cli.js",
+    "screen": "tsx src/cli.ts screen",
+    "realtime": "tsx src/cli.ts realtime",
+    "auto": "tsx src/cli.ts start",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "tsx --test \"src/**/*.test.ts\"",
+    "test:mimo": "node test-mimo.js",
+    "learning:reset": "node scripts/reset-learning.mjs",
+    "learning:recompute": "tsx src/learning/recompute-outcomes.ts",
+    "learning:calibrate": "tsx src/learning/calibrate-confidence.ts"
+  },
+  "keywords": [
+    "solana",
+    "meteora",
+    "dlmm",
+    "screener",
+    "cli",
+    "helius",
+    "defi",
+    "agent"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@meteora-ag/dlmm": "^1.3.0",
+    "@solana/web3.js": "^1.95.3",
+    "async-mutex": "^0.5.0",
+    "axios": "^1.7.7",
+    "bn.js": "^5.2.3",
+    "bs58": "^6.0.0",
+    "chalk": "^5.3.0",
+    "cli-table3": "^0.6.5",
+    "commander": "^12.1.0",
+    "dotenv": "^16.4.5",
+    "node-cron": "^3.0.3",
+    "ora": "^8.1.0",
+    "pino": "^9.4.0",
+    "pino-pretty": "^11.2.2",
+    "ws": "^8.18.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/bn.js": "^5.2.0",
+    "@types/node": "^22.5.5",
+    "@types/node-cron": "^3.0.11",
+    "@types/ws": "^8.5.12",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}

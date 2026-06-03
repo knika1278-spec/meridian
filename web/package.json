@@ -1,0 +1,30 @@
+{
+  "name": "meteora-memory-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev -p 4555",
+    "build": "next build",
+    "start": "next start -p 4555",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@next/swc-linux-x64-gnu": "^16.2.7",
+    "clsx": "^2.1.1",
+    "next": "^14.2.35",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-force-graph-2d": "1.25.5",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.5.5",
+    "@types/react": "18.3.11",
+    "@types/react-dom": "18.3.0",
+    "autoprefixer": "^10.5.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^3.4.19",
+    "typescript": "5.6.2"
+  }
+}

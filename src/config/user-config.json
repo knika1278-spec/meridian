@@ -1,0 +1,221 @@
+{
+  "rpc": {
+    "url": "https://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}",
+    "wsUrl": "wss://mainnet.helius-rpc.com/?api-key=${HELIUS_API_KEY}",
+    "commitment": "confirmed"
+  },
+  "meteora": {
+    "programId": "LBUZKhRxPF3XUpBCjp4YzTKgLccjZhTSDM9YuVaPwxo",
+    "apiUrl": "https://dlmm.datapi.meteora.ag",
+    "timeframe": "30m",
+    "category": "trending"
+  },
+  "meteoraPnl": {
+    "baseUrl": "https://dlmm-api.meteora.ag",
+    "enabled": true
+  },
+  "lpagent": {
+    "baseUrl": "https://api.lpagent.io",
+    "apiKey": "${LPAGENT_API_KEY}",
+    "enabled": true,
+    "pollIntervalMs": 60000
+  },
+  "jupiter": {
+    "baseUrl": "https://lite-api.jup.ag",
+    "apiKey": "${JUPITER_API_KEY}"
+  },
+  "okx": {
+    "baseUrl": "https://web3.okx.com",
+    "apiKey": "${OKX_API_KEY}",
+    "chainShortName": "sol",
+    "enabled": true
+  },
+  "llm": {
+    "provider": "claude-cli",
+    "model": "sonnet",
+    "binary": "claude",
+    "temperature": 0.2,
+    "maxTokens": 1500,
+    "enabled": true,
+    "maxCallsPerScreenCycle": 6
+  },
+  "scheduler": {
+    "screenCron": "*/30 * * * *",
+    "screeningIntervalMin": 30,
+    "enabled": true
+  },
+  "entryPolicy": {
+    "enabled": true,
+    "mode": "observe",
+    "maxLlmCandidates": 6,
+    "maxDeploysPerCycle": 2,
+    "realtime": {
+      "maxSignalAgeMs": 180000,
+      "minSwaps": 3,
+      "minDistinctSlots": 2,
+      "maxRemoveMinusAdd": 1,
+      "trendBuckets": 6,
+      "minSustainedRatio": 0.5,
+      "maxBurstConcentration": 0.7
+    },
+    "freshness": {
+      "maxSnapshotAgeMs": 60000,
+      "maxActiveBinDriftBins": 2,
+      "maxPriceMovePct": 2.5
+    },
+    "collapseGuard": {
+      "enabled": true,
+      "mode": "enforce",
+      "requireRiskDataForEnter": false,
+      "blockDevSoldAll": false,
+      "priceVsAthPctMin": 50,
+      "maxDevRugCount": 1,
+      "maxDevTokenCount": 50,
+      "maxSniperPct": 5,
+      "blockRiskScore": 50,
+      "reduceRiskScore": 25,
+      "reduceSizeMultiplier": 0.5,
+      "microStabilityDelayMs": 2500,
+      "microMaxActiveBinDriftBins": 2,
+      "microMaxPriceMovePct": 1.5
+    }
+  },
+  "paperTrading": {
+    "enabled": false,
+    "openOnDryRun": true,
+    "maxOpenPositions": 6,
+    "openMode": "fresh_snapshot"
+  },
+  "filters": {
+    "feeActiveTvlRatioMin": 0.05,
+    "organicScoreMin": 60,
+    "holdersMin": 500,
+    "marketCapMin": 150000,
+    "marketCapMax": 10000000,
+    "binStepMin": 80,
+    "binStepMax": 125,
+    "tvlMin": 10000,
+    "tvlMax": 150000,
+    "volume24hMin": 500,
+    "excludedTokens": [],
+    "includedTokens": [
+      "So11111111111111111111111111111111111111112"
+    ],
+    "okxRiskScoreMax": 70,
+    "minTokenFeesSol": 30,
+    "maxBundlersPct": 30,
+    "maxTop10Pct": 60,
+    "blockedLaunchpads": [],
+    "smartMoneyNetFlowUsdMin": 0,
+    "requireMintAuthorityDisabled": false,
+    "requireFreezeAuthorityDisabled": false,
+    "requireRecentActivity": true
+  },
+  "output": {
+    "decisionLogPath": "./data/decision-log.json",
+    "verbose": true,
+    "dataDir": "./data"
+  },
+  "dryRun": false,
+  "websocket": {
+    "reconnectMaxAttempts": 50,
+    "reconnectBaseDelayMs": 1000,
+    "reconnectMaxDelayMs": 60000
+  },
+  "manager": {
+    "enabled": true,
+    "cron": "*/10 * * * *",
+    "managementIntervalMin": 10,
+    "useLlm": false,
+    "maxOpenPositions": 3,
+    "deployAmountSol": 1,
+    "positionSizePct": 0.35,
+    "maxDeployAmount": 50,
+    "gasReserve": 0.2,
+    "minSolToOpen": 0.55,
+    "defaultRangeBps": 400,
+    "priorityFeeLamports": 50000,
+    "maxBinsPerSide": 30,
+    "autoCleanupEmpty": true,
+    "riskWatcherIntervalSec": 10,
+    "riskWatcherEnabled": true,
+    "realtimeRebalance": {
+      "enabled": true,
+      "throttleMs": 60000,
+      "triggerOnSwap": true,
+      "triggerOnBinChange": true
+    },
+    "postCloseSwap": {
+      "enabled": true,
+      "slippageBps": 50,
+      "minSwapUsd": 1,
+      "maxPriceImpactPct": 10
+    },
+    "thresholds": {
+      "claimMinUsd": 2,
+      "outOfRangeMaxMinutes": 60,
+      "stopLossPct": -15,
+      "maxIlUsd": 5,
+      "minTimeBeforeRebalanceMinutes": 60,
+      "maxPositionAgeMinutes": 1440,
+      "trailingTakeProfit": true,
+      "trailingTriggerPct": 5,
+      "trailingDropPct": 2
+    },
+    "positionsFile": "./data/positions.json",
+    "closedPositionsFile": "./data/closed-positions.json",
+    "lessonsFile": "./data/lessons.json",
+    "lessonsContextLimit": 3
+  },
+  "capital": {
+    "enabled": false,
+    "minReserveSol": 0.2,
+    "targetUsdcFraction": 0.5,
+    "rebalanceThresholdPct": 10,
+    "usdcMint": "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v",
+    "slippageBps": 50
+  },
+  "learning": {
+    "enabled": true,
+    "mode": "active",
+    "horizonsMinutes": [
+      10,
+      30,
+      120,
+      360
+    ],
+    "minEvidenceForScore": 5,
+    "injectIntoManagerPrompt": false,
+    "recencyHalfLifeDays": 14,
+    "maxOutcomesPerCycle": 20,
+    "files": {
+      "decisions": "./data/learning-decisions.jsonl",
+      "outcomes": "./data/learning-outcomes.jsonl",
+      "shadowScores": "./data/shadow-scores.jsonl",
+      "lessons": "./data/learning-lessons.jsonl",
+      "snapshot": "./data/learning-snapshot.jsonl",
+      "signalWeights": "./data/signal-weights.json"
+    }
+  },
+  "safety": {
+    "enabled": true,
+    "maxSingleTradeUsd": 50,
+    "maxDailyLossUsd": 20,
+    "maxTotalDrawdownPct": 0.1,
+    "startingCapitalUsd": 100,
+    "circuitBreaker": {
+      "maxConsecutiveLosses": 3
+    }
+  },
+  "memory": {
+    "enabled": true,
+    "journalFile": "./data/decision-journal.jsonl",
+    "injectIntoScreener": true,
+    "injectIntoManager": false,
+    "injectIntoPostMortem": true,
+    "recentLimit": 8,
+    "maxPromptItems": 6,
+    "includeLearningEvidence": true,
+    "minEvidenceForPrompt": 5
+  }
+}
